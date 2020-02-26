@@ -1,38 +1,29 @@
 pipeline {
-  agent any
-  tools {
-    nodejs 'node-11.0.0'
-  }
+    agent any
+    parameters {
+        string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
 
-  options {
-    timeout(time: 2, unit: 'MINUTES')
-  }
-  
-  stages {
-          stage("Gather Deployment Parameters") {
-              steps {
-                  timeout(time: 30, unit: 'SECONDS') {
-                      script {
-                          // Show the select input modal
-                         def INPUT_PARAMS = input message: 'Please Provide Parameters', ok: 'Next',
-                                          parameters: [
-                                          choice(name: 'ENVIRONMENT', choices: ['dev','qa'].join('\n'), description: 'Please select the Environment'),
-                                          choice(name: 'IMAGE_TAG', choices: getDockerImages(), description: 'Available Docker Images')]
-                          env.ENVIRONMENT = INPUT_PARAMS.ENVIRONMENT
-                          env.IMAGE_TAG = INPUT_PARAMS.IMAGE_TAG
-                      }
-                  }
-              }
-          }
-          stage("Use Deployment Parameters") {
-               steps {
-                      script {
-                          echo "All parameters have been set as Environment Variables"
-                          echo "Selected Environment: ${env.ENVIRONMENT}"
-                          echo "Selected Tag: ${env.IMAGE_TAG}"
-                      }
-               }
-          }
-  }
-  
+        text(name: 'BIOGRAPHY', defaultValue: '', description: 'Enter some information about the person')
+
+        booleanParam(name: 'TOGGLE', defaultValue: true, description: 'Toggle this value')
+
+        choice(name: 'CHOICE', choices: ['One', 'Two', 'Three'], description: 'Pick something')
+
+        password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
+    }
+    stages {
+        stage('Example') {
+            steps {
+                echo "Hello ${params.PERSON}"
+
+                echo "Biography: ${params.BIOGRAPHY}"
+
+                echo "Toggle: ${params.TOGGLE}"
+
+                echo "Choice: ${params.CHOICE}"
+
+                echo "Password: ${params.PASSWORD}"
+            }
+        }
+    }
 }
