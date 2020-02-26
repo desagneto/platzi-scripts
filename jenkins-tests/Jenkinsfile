@@ -5,7 +5,9 @@ pipeline {
   }
 
   options {
-    timeout(time: 2, unit: 'MINUTES')
+    timeout(time: 2, unit: 'MINUTES'){
+      input message: 'Do you want to approve the deploy in production?', ok: 'Yes'
+    }
   }
 
   stages {
