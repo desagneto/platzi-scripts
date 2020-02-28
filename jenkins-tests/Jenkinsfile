@@ -12,6 +12,10 @@ pipeline {
         password(name: 'PASSWORD', defaultValue: 'SECRET', description: 'Enter a password')
     }
     stages {
+        stage('JIRA') {
+            def serverInfo = jiraGetServerInfo()
+            echo serverInfo.data.toString()
+        }
         stage('Example') {
             steps {
                 echo "Hello ${params.PERSON}"
