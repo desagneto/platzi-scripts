@@ -8,6 +8,10 @@ pipeline {
     timeout(time: 2, unit: 'MINUTES')
   }
 
+  triggers {
+    githubPush()
+  }
+
   stages {
     stage('Install dependencies') {
       steps {
